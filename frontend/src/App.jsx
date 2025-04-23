@@ -24,7 +24,10 @@ function App() {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        Loading...
+        <div className="flex flex-col items-center">
+          <div className="loading loading-spinner loading-lg text-blue-500"></div>
+          <p className="mt-4 text-sm sm:text-base text-gray-600">Loading...</p>
+        </div>
       </div>
     );
   }
@@ -33,10 +36,10 @@ function App() {
   const hideLayout = hideLayoutRoutes.includes(location.pathname);
 
   return (
-    <div>
-      <div className="flex mx-auto max-w-[85rem]">
+    <div className="bg-white min-h-screen">
+      <div className="flex flex-row mx-auto max-w-full sm:max-w-[100%] lg:max-w-[85rem]">
         {!hideLayout && <Sidebar />}
-        <div className="flex-1">
+        <div className="flex-1 min-w-0 border-l border-r border-gray-100">
           <Routes>
             <Route
               path="/"
@@ -85,7 +88,17 @@ function App() {
           </Routes>
         </div>
         {!hideLayout && <RightPanel />}
-        <Toaster />
+        <Toaster
+          position="top-center"
+          toastOptions={{
+            duration: 3000,
+            style: {
+              maxWidth: "90vw",
+              fontSize: "0.875rem",
+              padding: "0.5rem 1rem",
+            },
+          }}
+        />
       </div>
     </div>
   );

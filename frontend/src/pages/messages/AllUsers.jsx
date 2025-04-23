@@ -61,7 +61,7 @@ const AllUsers = () => {
   };
 
   return (
-    <div className="ml-5 mt-5 mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+    <div className="mx-5 mt-5 bg-white rounded-lg shadow-md overflow-hidden">
       <div className="p-4 bg-blue-500 text-white">
         <h1 className="text-xl font-bold">My Conversations</h1>
       </div>

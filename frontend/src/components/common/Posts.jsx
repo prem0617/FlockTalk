@@ -85,7 +85,7 @@ const Posts = ({ feedType, userId }) => {
   }, [socket]);
 
   return (
-    <>
+    <div className="w-full px-2 sm:px-3 md:px-7">
       {isFetchPostLoading ? (
         <div className="flex flex-col justify-center">
           <PostSkeleton />
@@ -93,15 +93,20 @@ const Posts = ({ feedType, userId }) => {
           <PostSkeleton />
         </div>
       ) : posts.length > 0 ? (
-        <div>
+        <div className="w-full">
           {posts.map((post) => (
             <Post key={post._id} postData={post} />
           ))}
         </div>
       ) : (
-        <p className="text-center my-4">No posts in this tab. Switch 👻</p>
+        <div className="flex items-center justify-center min-h-[200px]">
+          <p className="text-center text-sm sm:text-base my-2 sm:my-4 text-gray-600">
+            No posts in this tab. Switch{" "}
+            <span className="inline-block">👻</span>
+          </p>
+        </div>
       )}
-    </>
+    </div>
   );
 };
 export default Posts;
