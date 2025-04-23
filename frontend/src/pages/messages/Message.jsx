@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { useSocket } from "../../context/SocketContext";
 import { Send, ArrowLeft } from "lucide-react";
 import useUser from "../../context/UserContext";
+import { BACKEND_URL } from "../../config";
 
 const Message = () => {
   const { id } = useParams();
@@ -22,7 +23,7 @@ const Message = () => {
   const getReceiver = async () => {
     try {
       setIsFetchingUser(true);
-      const response = await axios.get(`http://localhost:8000/api/user/${id}`, {
+      const response = await axios.get(`${BACKEND_URL}/api/user/${id}`, {
         withCredentials: true,
       });
       console.log(response);
@@ -39,7 +40,7 @@ const Message = () => {
     try {
       setIsFetchingMessages(true);
       const response = await axios.get(
-        `http://localhost:8000/api/message/getMessages/${id}`,
+        `${BACKEND_URL}/api/message/getMessages/${id}`,
         { withCredentials: true }
       );
       console.log(response);
@@ -58,7 +59,7 @@ const Message = () => {
 
     try {
       const response = await axios.post(
-        `http://localhost:8000/api/message/sendMessage/${id}`,
+        `${BACKEND_URL}/api/message/sendMessage/${id}`,
         { text },
         { withCredentials: true }
       );

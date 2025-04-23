@@ -2,6 +2,7 @@ import axios from "axios";
 import { ArrowLeft, Search } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { BACKEND_URL } from "../../config";
 
 const FollowersUsers = () => {
   const { id } = useParams();
@@ -12,7 +13,7 @@ const FollowersUsers = () => {
   const fetchUserFollowers = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/user/getFollowersUsers/${id}`,
+        `${BACKEND_URL}/api/user/getFollowersUsers/${id}`,
         { withCredentials: true }
       );
       console.log(response);

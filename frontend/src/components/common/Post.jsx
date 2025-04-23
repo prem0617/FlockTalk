@@ -13,6 +13,7 @@ import { FaRegComment } from "react-icons/fa6";
 import axios from "axios";
 import { useSocket } from "../../context/SocketContext";
 import useUser from "../../context/UserContext";
+import { BACKEND_URL } from "../../config";
 
 const PostCard = ({ postData }) => {
   const [post, setPost] = useState(postData);
@@ -47,7 +48,7 @@ const PostCard = ({ postData }) => {
     try {
       setDeleteLoading(true);
       const response = await fetch(
-        `http://localhost:8000/api/posts/delete/${post._id}`,
+        `${BACKEND_URL}/api/posts/delete/${post._id}`,
         {
           method: "POST",
           credentials: "include",
@@ -68,7 +69,7 @@ const PostCard = ({ postData }) => {
     try {
       setIsLiking(true);
       const response = await fetch(
-        `http://localhost:8000/api/posts/like/${post._id}`,
+        `${BACKEND_URL}/api/posts/like/${post._id}`,
         {
           credentials: "include",
         }
@@ -86,7 +87,7 @@ const PostCard = ({ postData }) => {
   const bookmark = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/posts/bookmark/${post._id}`,
+        `${BACKEND_URL}/api/posts/bookmark/${post._id}`,
         {
           withCredentials: true,
         }
@@ -113,7 +114,7 @@ const PostCard = ({ postData }) => {
     try {
       setIsCommenting(true);
       const response = await axios.post(
-        `http://localhost:8000/api/posts/comment/${post._id}`,
+        `${BACKEND_URL}/api/posts/comment/${post._id}`,
         { text: comment },
         {
           withCredentials: true,

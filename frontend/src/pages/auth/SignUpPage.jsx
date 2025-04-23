@@ -3,6 +3,8 @@ import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import useUser from "../../context/UserContext";
+import { BACKEND_URL } from "../../config";
+console.log(BACKEND_URL);
 
 const SignUpPage = () => {
   const [formData, setFormData] = useState({
@@ -26,11 +28,11 @@ const SignUpPage = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/auth/signup",
+        `${BACKEND_URL}/api/auth/signup`,
         formData,
         { withCredentials: true }
       );
-      console.log(response.data);
+      console.log(response);
 
       if (response.status === 200 || response.status === 201) {
         const user = response.data;
@@ -42,6 +44,7 @@ const SignUpPage = () => {
         throw new Error("Unexpected error occurred");
       }
     } catch (err) {
+      console.log(err);
       const errorMsg = err.response?.data?.error || "Signup failed";
       setError(errorMsg);
       toast.error(errorMsg);

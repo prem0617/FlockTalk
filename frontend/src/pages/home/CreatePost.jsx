@@ -5,6 +5,7 @@ import { BsEmojiSmileFill } from "react-icons/bs";
 import { IoCloseSharp } from "react-icons/io5";
 import { FiSend } from "react-icons/fi";
 import useUser from "../../context/UserContext";
+import { BACKEND_URL } from "../../config";
 
 const CreatePost = () => {
   const [text, setText] = useState("");
@@ -31,7 +32,7 @@ const CreatePost = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/posts/create",
+        `${BACKEND_URL}/api/posts/create`,
         isOnlyText ? { text } : formData,
         {
           withCredentials: true,

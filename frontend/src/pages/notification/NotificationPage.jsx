@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSocket } from "../../context/SocketContext";
 import { toast } from "react-hot-toast";
+import { BACKEND_URL } from "../../config";
 
 const NotificationPage = () => {
   const [notifications, setNotifications] = useState([]);
@@ -16,10 +17,9 @@ const NotificationPage = () => {
 
   const deleteNotifications = async () => {
     try {
-      const response = await axios.delete(
-        "http://localhost:8000/api/notification",
-        { withCredentials: true }
-      );
+      const response = await axios.delete(`${BACKEND_URL}/api/notification`, {
+        withCredentials: true,
+      });
       console.log(response);
       if (response.status === 200) {
         toast.success("Notification deleted");
@@ -33,12 +33,9 @@ const NotificationPage = () => {
   const fetchNotification = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(
-        "http://localhost:8000/api/notification",
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await axios.get(`${BACKEND_URL}/api/notification`, {
+        withCredentials: true,
+      });
       console.log(response);
       setNotifications(response.data);
     } catch (error) {
@@ -55,7 +52,7 @@ const NotificationPage = () => {
 
     try {
       const response = await axios.delete(
-        `http://localhost:8000/api/notification/${id}`,
+        `${BACKEND_URL}/api/notification/${id}`,
         {
           withCredentials: true,
         }

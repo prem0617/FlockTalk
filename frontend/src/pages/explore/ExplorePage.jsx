@@ -2,6 +2,7 @@ import { User } from "lucide-react";
 import React, { useEffect, useMemo, useState } from "react";
 import { FaSearch, FaUserPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { BACKEND_URL } from "../../config";
 
 const UserSkeleton = () => {
   return (
@@ -23,12 +24,9 @@ const ExplorePage = () => {
     try {
       try {
         setIsLoading(true);
-        const response = await fetch(
-          "http://localhost:8000/api/user/suggested",
-          {
-            credentials: "include",
-          }
-        );
+        const response = await fetch(`${BACKEND_URL}/api/user/suggested`, {
+          credentials: "include",
+        });
         const data = await response.json();
         if (data.error) throw new Error(data.error);
         setUsers(data);

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
 import useUser from "../../context/UserContext";
+import { BACKEND_URL } from "../../config";
 
 const EditProfileModal = () => {
   const { user, setUser } = useUser();
@@ -28,7 +29,7 @@ const EditProfileModal = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/user/update",
+        `${BACKEND_URL}/api/user/update`,
         formData,
         { withCredentials: true }
       );

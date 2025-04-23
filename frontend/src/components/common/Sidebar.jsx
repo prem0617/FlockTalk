@@ -9,6 +9,7 @@ import { BiLogOut } from "react-icons/bi";
 import { BsChat } from "react-icons/bs";
 import useUser from "../../context/UserContext";
 import axios from "axios";
+import { BACKEND_URL } from "../../config";
 
 const Sidebar = () => {
   const location = useLocation();
@@ -24,12 +25,9 @@ const Sidebar = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:8000/api/auth/logout",
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await axios.get(`${BACKEND_URL}/api/auth/logout`, {
+        withCredentials: true,
+      });
 
       console.log(response);
       if (response.status === 200) {

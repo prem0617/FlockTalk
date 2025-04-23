@@ -5,6 +5,8 @@ export const generateTokenAndSetCookies = (userId, res) => {
     expiresIn: "15d", // Token expiration
   });
 
+  console.log(token, "TOKEN");
+
   res.cookie("flocktalk", token, {
     httpOnly: true,
     secure: false, // Change to true in production with HTTPS

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
+import { BACKEND_URL } from "../config";
 
 const UserContext = createContext(null);
 
@@ -28,7 +29,7 @@ export const UserContextProvider = ({ children }) => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/auth/me", {
+        const response = await axios.get(`${BACKEND_URL}/api/auth/me`, {
           withCredentials: true,
         });
 
@@ -49,7 +50,7 @@ export const UserContextProvider = ({ children }) => {
   const logout = async () => {
     try {
       await axios.post(
-        "http://localhost:8000/api/auth/logout",
+        `${BACKEND_URL}/api/auth/logout`,
         {},
         { withCredentials: true }
       );

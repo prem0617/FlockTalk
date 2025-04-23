@@ -4,6 +4,7 @@ import { FaUserPlus } from "react-icons/fa";
 import { IoRefreshOutline } from "react-icons/io5";
 import { useEffect, useState } from "react";
 import { useSocket } from "../../context/SocketContext";
+import { BACKEND_URL } from "../../config";
 
 const RightPanel = () => {
   const [isLoading, setIsLoading] = useState(false);

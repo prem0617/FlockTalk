@@ -4,6 +4,7 @@ import PostSkeleton from "../skeletons/PostSkeleton";
 import { useEffect, useState } from "react";
 import { useSocket } from "../../context/SocketContext";
 import useUser from "../../context/UserContext";
+import { BACKEND_URL } from "../../config";
 
 const Posts = ({ feedType, userId }) => {
   const { user } = useUser();
@@ -20,17 +21,17 @@ const Posts = ({ feedType, userId }) => {
 
   const getApiEndPosint = () => {
     if (feedType === "forYou") {
-      return "http://localhost:8000/api/posts/getAllPost";
+      return `https://flocktalk.onrender.com/api/posts/getAllPost`;
     } else if (feedType === "following") {
-      return "http://localhost:8000/api/posts/following";
+      return `${BACKEND_URL}/api/posts/following`;
     } else if (feedType === "likes") {
-      return `http://localhost:8000/api/posts/getLikedPost/${id}`;
+      return `${BACKEND_URL}/api/posts/getLikedPost/${id}`;
     } else if (feedType === "posts") {
-      return `http://localhost:8000/api/posts/userPost/${userId}`;
+      return `${BACKEND_URL}/api/posts/userPost/${userId}`;
     } else if (feedType === "bookmarks") {
-      return "http://localhost:8000/api/posts/getBookmark";
+      return `${BACKEND_URL}/api/posts/getBookmark`;
     } else {
-      return "http://localhost:8000/api/posts/all";
+      return `${BACKEND_URL}/api/posts/all`;
     }
   };
 

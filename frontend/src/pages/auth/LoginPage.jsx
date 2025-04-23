@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 import useUser from "../../context/UserContext";
+import { BACKEND_URL } from "../../config";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ const LoginPage = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/auth/login",
+        `https://flocktalk.onrender.com/api/auth/login`,
         formData,
         { withCredentials: true }
       );
@@ -57,10 +58,12 @@ const LoginPage = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/auth/login",
+        `${BACKEND_URL}/api/auth/login`,
         { username: "guest_0671", password: "guest@321" },
         { withCredentials: true }
       );
+
+      console.log(response);
 
       if (response.status === 200) {
         const user = response.data.user;

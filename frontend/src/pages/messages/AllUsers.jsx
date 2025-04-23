@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { MessageSquare, Search, User } from "lucide-react";
 import useUser from "../../context/UserContext";
+import { BACKEND_URL } from "../../config";
 
 // Skeleton component for loading state
 const UserSkeleton = () => {
@@ -29,10 +30,9 @@ const AllUsers = () => {
   const getUserChats = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(
-        `http://localhost:8000/api/message/chatUsrs`,
-        { withCredentials: true }
-      );
+      const response = await axios.get(`${BACKEND_URL}/api/message/chatUsrs`, {
+        withCredentials: true,
+      });
       // console.log(response);
       setFollowingUsers(response.data);
       return response.data;

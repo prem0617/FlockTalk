@@ -1,5 +1,6 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { BACKEND_URL } from "../config";
 
 const Follow = () => {
   const queryClient = useQueryClient();
@@ -7,7 +8,7 @@ const Follow = () => {
   const { mutate: followUser, isPending } = useMutation({
     mutationFn: async (id) => {
       try {
-        const ENDAPI = `http://localhost:8000/api/user/follow/${id}`;
+        const ENDAPI = `${BACKEND_URL}/api/user/follow/${id}`;
         console.log(id);
         console.log(ENDAPI);
         const response = await fetch(ENDAPI, {

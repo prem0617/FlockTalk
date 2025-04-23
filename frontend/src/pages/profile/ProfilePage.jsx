@@ -11,6 +11,7 @@ import { MdEdit } from "react-icons/md";
 import axios from "axios";
 import useUser from "../../context/UserContext";
 import { Loader2 } from "lucide-react";
+import { BACKEND_URL } from "../../config";
 
 const ProfilePage = () => {
   const { id } = useParams();
@@ -73,7 +74,7 @@ const ProfilePage = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/user/update",
+        `${BACKEND_URL}/api/user/update`,
         formData,
         {
           headers: {
@@ -94,7 +95,7 @@ const ProfilePage = () => {
   const fetchUser = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(`http://localhost:8000/api/user/${id}`, {
+      const response = await axios.get(`${BACKEND_URL}/api/user/${id}`, {
         withCredentials: true,
       });
       // console.log(response);
@@ -111,12 +112,9 @@ const ProfilePage = () => {
     const { e, id } = data;
     e.preventDefault();
     try {
-      const response = await axios.get(
-        `http://localhost:8000/api/user/follow/${id}`,
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await axios.get(`${BACKEND_URL}/api/user/follow/${id}`, {
+        withCredentials: true,
+      });
       console.log(response);
       if (response.data.follow) setIsUserFollowing(true);
       else setIsUserFollowing(false);
