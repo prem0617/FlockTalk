@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState, useContext } from "react";
 import { io } from "socket.io-client";
 import useUser from "./UserContext";
+import { BACKEND_URL } from "../config";
 
 export const SocketContext = createContext(null);
 
@@ -13,7 +14,7 @@ const SocketContextProvider = ({ children }) => {
   useEffect(() => {
     if (loading || !user) return;
 
-    const newSocket = io("http://localhost:8000", {
+    const newSocket = io(`${BACKEND_URL}`, {
       query: { userId: user._id },
     });
 

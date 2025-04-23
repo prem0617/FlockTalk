@@ -9,7 +9,7 @@ export const generateTokenAndSetCookies = (userId, res) => {
 
   res.cookie("flocktalk", token, {
     httpOnly: true,
-    secure: false, // Change to true in production with HTTPS
-    sameSite: "lax", // Adjust if needed
+    secure: true, // ✅ for HTTPS
+    sameSite: "None", // ✅ required for cross-site cookies
   });
 };

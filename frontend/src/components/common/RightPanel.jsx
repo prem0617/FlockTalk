@@ -15,7 +15,7 @@ const RightPanel = () => {
   const fetchSuggest = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch("http://localhost:8000/api/user/suggested", {
+      const response = await fetch(`${BACKEND_URL}/api/user/suggested`, {
         credentials: "include",
       });
       const data = await response.json();
@@ -35,7 +35,7 @@ const RightPanel = () => {
       // Set loading state for this specific user ID
       setLoadingFollows((prev) => ({ ...prev, [id]: true }));
 
-      const ENDAPI = `http://localhost:8000/api/user/follow/${id}`;
+      const ENDAPI = `${BACKEND_URL}/api/user/follow/${id}`;
       const response = await fetch(ENDAPI, {
         credentials: "include",
       });
