@@ -127,7 +127,11 @@ export const login = async (req, res) => {
 // logout route
 export const logout = async (req, res) => {
   try {
-    const user = req.user;
+    const user = await UserModel.findById(req.user._id).select("-password");
+
+    console.log("logout route");
+
+    console.log(user);
 
     if (!user) return res.status(404).json({ message: "User not found" });
 
@@ -138,7 +142,7 @@ export const logout = async (req, res) => {
       expires: new Date(0), // ✅ or use maxAge: 0
     });
 
-    res.status(200).json({ message: "Logout successfully", user: user });
+    return res.status(200).json({ message: "Logout successfully", user: user });
   } catch (error) {
     // error
     res.status(500).json({ error: error.message });

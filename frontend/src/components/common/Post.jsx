@@ -109,7 +109,7 @@ const PostCard = ({ postData }) => {
 
   const handlePostComment = async (e) => {
     e.preventDefault();
-    console.log(comment);
+    // console.log(comment);
     // Add your comment posting logic here
     try {
       setIsCommenting(true);
@@ -135,7 +135,7 @@ const PostCard = ({ postData }) => {
     bookmark();
   };
 
-  console.log(isBookmarked);
+  // console.log(isBookmarked);
 
   useEffect(() => {
     const handleLikeUnlike = (data) => {
@@ -146,7 +146,7 @@ const PostCard = ({ postData }) => {
 
     const handleBookmark = (data) => {
       if (post._id === data.id) {
-        console.log(data);
+        // console.log(data);
         setPost((prev) => ({ ...prev, bookmarks: data.bookmark }));
         setIsBookmarked(data.bookmark.includes(user._id));
       }
@@ -174,7 +174,7 @@ const PostCard = ({ postData }) => {
       socket.off("comment", handleComment);
     };
   }, [post._id, user?._id]); // ✅ Remove `post` from dependencies
-  console.log(post);
+  // console.log(post);
   return (
     <>
       {post && (

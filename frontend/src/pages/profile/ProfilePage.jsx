@@ -108,7 +108,7 @@ const ProfilePage = () => {
   };
 
   const handleFollow = async (data) => {
-    console.log(data);
+    // console.log(data);
     const { e, id } = data;
     e.preventDefault();
     try {
