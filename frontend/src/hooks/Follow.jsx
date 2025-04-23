@@ -10,7 +10,7 @@ const Follow = () => {
       try {
         const ENDAPI = `${BACKEND_URL}/api/user/follow/${id}`;
         console.log(id);
-        console.log(ENDAPI);
+        // console.log(ENDAPI);
         const response = await fetch(ENDAPI, {
           credentials: "include",
         });

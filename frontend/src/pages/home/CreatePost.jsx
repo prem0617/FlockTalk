@@ -53,7 +53,7 @@ const CreatePost = () => {
       setImagePreview(null);
       if (imgRef.current) imgRef.current.value = null;
 
-      console.log("Post created:", response.data);
+      // console.log("Post created:", response.data);
     } catch (err) {
       console.error(err);
       setError("Something went wrong. Please try again.");

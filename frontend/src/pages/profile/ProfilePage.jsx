@@ -122,7 +122,7 @@ const ProfilePage = () => {
     } catch (error) {
       console.log(error);
     }
-    console.log("follow button clicked");
+    // console.log("follow button clicked");
   };
 
   useEffect(() => {

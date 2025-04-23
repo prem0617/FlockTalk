@@ -127,9 +127,18 @@ export const login = async (req, res) => {
 // logout route
 export const logout = async (req, res) => {
   try {
-    // remove cookies from browser session`
-    res.cookie("flocktalk", "", { maxAge: 0 });
-    res.status(200).json({ message: "Logout successfully" });
+    const user = req.user;
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    res.cookie("flocktalk", "", {
+      httpOnly: true,
+      secure: true, // ✅ must match the `secure` option used during login
+      sameSite: "None", // ✅ must match the `sameSite` option used during login
+      expires: new Date(0), // ✅ or use maxAge: 0
+    });
+
+    res.status(200).json({ message: "Logout successfully", user: user });
   } catch (error) {
     // error
     res.status(500).json({ error: error.message });

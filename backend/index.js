@@ -21,10 +21,22 @@ app.use(express.json({ limit: "10mb" })); // to parse req.body
 app.use(express.urlencoded({ extended: true })); //  parse incoming requests with application/x-www-form-urlencoded payloads (commonly sent by HTML forms).
 app.use(cookieParser());
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://flocktalk.vercel.app",
+];
+
 app.use(
   cors({
-    origin: "http://localhost:5173", // Allow only your frontend
-    credentials: true, // Allow cookies & authentication
+    origin: function (origin, callback) {
+      // allow requests with no origin (like mobile apps or curl)
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
   })
 );
 

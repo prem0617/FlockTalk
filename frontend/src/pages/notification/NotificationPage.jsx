@@ -48,7 +48,7 @@ const NotificationPage = () => {
   const handleDeleteNotification = async (data) => {
     const { e, id } = data;
     e.preventDefault();
-    console.log(data);
+    // console.log(data);
 
     try {
       const response = await axios.delete(
@@ -76,7 +76,7 @@ const NotificationPage = () => {
     if (!socket) return;
 
     const handleNotification = (notification) => {
-      console.log(notification);
+      // console.log(notification);
       setNotifications((prevNotification) => [
         notification,
         ...prevNotification,
@@ -84,7 +84,7 @@ const NotificationPage = () => {
     };
     socket.on("notification", handleNotification);
     socket.on("deleteNotification", (notification) => {
-      console.log(notification);
+      // console.log(notification);
       setNotifications((prevNotification) => {
         return prevNotification.filter((n) => n._id !== notification._id);
       });

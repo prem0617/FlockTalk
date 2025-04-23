@@ -85,7 +85,7 @@ const Message = () => {
     scrollToBottom();
   }, [messages]);
 
-  console.log(receiver);
+  // console.log(receiver);
 
   useEffect(() => {
     const isUserFollowing = user.following.includes(id);
@@ -100,7 +100,7 @@ const Message = () => {
     if (!socket) return;
 
     const handleMessage = (message) => {
-      console.log(message);
+      // console.log(message);
       setMessages((prevMessages) => [...prevMessages, message]);
     };
 

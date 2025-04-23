@@ -15,6 +15,6 @@ router.post("/signup", signup);
 
 router.post("/login", login);
 
-router.get("/logout", logout);
+router.get("/logout", protectRoute, logout);
 
 export default router;

@@ -4,7 +4,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import useUser from "../../context/UserContext";
 import { BACKEND_URL } from "../../config";
-console.log(BACKEND_URL);
+// console.log(BACKEND_URL);
 
 const SignUpPage = () => {
   const [formData, setFormData] = useState({
