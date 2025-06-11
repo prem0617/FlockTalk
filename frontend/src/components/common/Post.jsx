@@ -129,6 +129,7 @@ const PostCard = ({ postData }) => {
   };
 
   useEffect(() => {
+    if (!socket) return;
     const handleLikeUnlike = (data) => {
       if (post._id === data.id) {
         setPost((prev) => ({ ...prev, likes: data.likes }));
@@ -162,7 +163,7 @@ const PostCard = ({ postData }) => {
       socket.off("bookmark", handleBookmark);
       socket.off("comment", handleComment);
     };
-  }, [post._id, user?._id]);
+  }, [post._id, user?._id, socket]);
 
   return (
     <>

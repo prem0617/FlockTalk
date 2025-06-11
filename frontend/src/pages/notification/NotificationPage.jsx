@@ -20,7 +20,7 @@ const NotificationPage = () => {
       const response = await axios.delete(`${BACKEND_URL}/api/notification`, {
         withCredentials: true,
       });
-      console.log(response);
+      // console.log(response);
       if (response.status === 200) {
         toast.success("Notification deleted");
       }
@@ -36,7 +36,7 @@ const NotificationPage = () => {
       const response = await axios.get(`${BACKEND_URL}/api/notification`, {
         withCredentials: true,
       });
-      console.log(response);
+      // console.log(response);
       setNotifications(response.data);
     } catch (error) {
       console.log(error);
@@ -57,7 +57,7 @@ const NotificationPage = () => {
           withCredentials: true,
         }
       );
-      console.log(response);
+      // console.log(response);
       if (response.status === 200) {
         toast.success("Notification deleted");
       }

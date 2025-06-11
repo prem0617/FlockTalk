@@ -26,7 +26,7 @@ const Message = () => {
       const response = await axios.get(`${BACKEND_URL}/api/user/${id}`, {
         withCredentials: true,
       });
-      console.log(response);
+      // console.log(response);
       setReceiver(response.data);
       return response.data;
     } catch (error) {
@@ -43,7 +43,7 @@ const Message = () => {
         `${BACKEND_URL}/api/message/getMessages/${id}`,
         { withCredentials: true }
       );
-      console.log(response);
+      // console.log(response);
       setMessages(response.data);
     } catch (error) {
       console.log(error);

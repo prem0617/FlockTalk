@@ -16,7 +16,7 @@ const FollowersUsers = () => {
         `${BACKEND_URL}/api/user/getFollowersUsers/${id}`,
         { withCredentials: true }
       );
-      console.log(response);
+      // console.log(response);
       setFollowers(response.data);
     } catch (error) {
       console.log(error);

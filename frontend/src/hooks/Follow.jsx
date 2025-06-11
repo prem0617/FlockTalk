@@ -9,15 +9,15 @@ const Follow = () => {
     mutationFn: async (id) => {
       try {
         const ENDAPI = `${BACKEND_URL}/api/user/follow/${id}`;
-        console.log(id);
+        // console.log(id);
         // console.log(ENDAPI);
         const response = await fetch(ENDAPI, {
           credentials: "include",
         });
-        console.log(response);
+        // console.log(response);
         const data = await response.json();
         if (data.error) throw new Error(error.data);
-        console.log(data);
+        // console.log(data);
         return data;
       } catch (error) {
         console.log(error);

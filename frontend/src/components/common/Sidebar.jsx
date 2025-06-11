@@ -27,7 +27,7 @@ const Sidebar = () => {
         withCredentials: true,
       });
 
-      console.log(response);
+      // console.log(response);
       if (response.status === 200) {
         localStorage.removeItem("user");
         setUser(null);

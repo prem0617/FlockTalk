@@ -20,7 +20,7 @@ const FollowingUsers = () => {
         `${BACKEND_URL}/api/user/getFollowingUsers/${id}`,
         { withCredentials: true }
       );
-      console.log(response);
+      // console.log(response);
       setFollowing(response.data);
     } catch (error) {
       console.log(error);
