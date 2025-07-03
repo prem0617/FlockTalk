@@ -119,120 +119,126 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="w-20 sm:w-24 md:flex-[2_2_0] md:w-auto md:max-w-52 lg:max-w-64 border-r border-gray-200">
-      <div className="sticky top-0 left-0 flex flex-col h-screen pt-2 sm:pt-4">
-        <div className="flex flex-col h-full">
-          {/* Logo */}
-          <div className="px-3 sm:px-4 mb-4 sm:mb-8 hidden md:block">
-            <h1 className="text-xl sm:text-2xl font-bold text-blue-500">
-              <span className="flex items-center gap-2">
-                FlockTalk
-                <FaFeatherAlt className="w-4 sm:w-5 h-4 sm:h-5" />
-              </span>
-            </h1>
-          </div>
+    <div className="w-16 sm:w-20 md:flex-[2_2_0] md:w-auto md:max-w-52 lg:max-w-64 border-r border-gray-200 bg-white">
+      <div className="sticky top-0 left-0 flex flex-col min-h-screen max-h-screen overflow-hidden">
+        {/* Mobile: Use viewport height with safe area, Desktop: Use screen height */}
+        <div className="flex flex-col h-[100vh] h-[100dvh] md:h-screen">
+          {/* Logo Section */}
+          <div className="flex-shrink-0 pt-2 sm:pt-4">
+            <Link to={"/"}>
+              <div className="px-3 sm:px-4 mb-4 sm:mb-6 hidden md:block">
+                <h1 className="text-xl sm:text-2xl font-bold text-blue-500 cursor-pointer">
+                  <span className="flex items-center gap-2">
+                    FlockTalk
+                    <FaFeatherAlt className="w-4 sm:w-5 h-4 sm:h-5" />
+                  </span>
+                </h1>
+              </div>
+            </Link>
 
-          {/* Mobile Logo */}
-          <div className="px-2 sm:px-4 mb-4 sm:mb-6 md:hidden flex justify-center">
-            <div className="bg-blue-500 text-white p-2 rounded-full">
-              <FaFeatherAlt className="w-5 sm:w-6 h-5 sm:h-6" />
+            {/* Mobile Logo */}
+            <div className="px-2 sm:px-4 mb-3 sm:mb-4 md:hidden flex justify-center">
+              <Link to={"/"}>
+                <div className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 transition-colors duration-200">
+                  <FaFeatherAlt className="w-4 sm:w-5 h-4 sm:h-5" />
+                </div>
+              </Link>
             </div>
           </div>
 
-          {/* Navigation */}
-          <nav className="space-y-1 flex flex-col items-center justify-center md:block mb-4 sm:mb-8 px-1 sm:px-2">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const active = isActive(item.path, item.exact);
+          {/* Navigation - Scrollable on mobile if needed */}
+          <nav className="flex-1 overflow-y-auto px-1 sm:px-2">
+            <div className="space-y-1 flex flex-col items-center justify-start md:block">
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                const active = isActive(item.path, item.exact);
 
-              return (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className={`flex items-center gap-2 sm:gap-4 px-2 sm:px-4 py-2 sm:py-3 rounded-full transition-all duration-200 ${
-                    active
-                      ? "text-blue-500 font-medium bg-blue-50"
-                      : "text-gray-700 hover:bg-gray-100"
-                  }`}
-                >
-                  <div className="relative">
-                    <Icon
-                      className={`w-5 h-5 sm:w-6 sm:h-6 ${
-                        active ? "text-blue-500" : "text-gray-500"
-                      }`}
-                    />
-                    {/* Notification Badge */}
-                    {item.hasNotification && notification > 0 && (
-                      <div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2">
-                        <div className="flex items-center justify-center min-w-[16px] sm:min-w-[18px] h-4 sm:h-[18px] bg-red-500 text-white text-[10px] sm:text-xs font-bold rounded-full px-1">
-                          {notification > 99 ? "99+" : notification}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  <span
-                    className={`text-sm sm:text-base hidden md:block ${
-                      active ? "font-medium" : ""
+                return (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    className={`flex items-center gap-2 sm:gap-4 px-2 sm:px-4 py-2 sm:py-3 rounded-full transition-all duration-200 w-full md:w-auto ${
+                      active
+                        ? "text-blue-500 font-medium bg-blue-50"
+                        : "text-gray-700 hover:bg-gray-100"
                     }`}
                   >
-                    {item.label}
-                  </span>
-                </Link>
-              );
-            })}
+                    <div className="relative flex-shrink-0">
+                      <Icon
+                        className={`w-5 h-5 sm:w-6 sm:h-6 ${
+                          active ? "text-blue-500" : "text-gray-500"
+                        }`}
+                      />
+                      {/* Notification Badge */}
+                      {item.hasNotification && notification > 0 && (
+                        <div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2">
+                          <div className="flex items-center justify-center min-w-[16px] sm:min-w-[18px] h-4 sm:h-[18px] bg-red-500 text-white text-[10px] sm:text-xs font-bold rounded-full px-1">
+                            {notification > 99 ? "99+" : notification}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <span
+                      className={`text-sm sm:text-base hidden md:block ${
+                        active ? "font-medium" : ""
+                      }`}
+                    >
+                      {item.label}
+                    </span>
+                  </Link>
+                );
+              })}
+            </div>
           </nav>
 
-          {/* User Profile */}
-          {loading ? (
-            <div className="mt-auto mb-4 sm:mb-6 px-2 sm:px-4">
-              <div className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-200 animate-pulse"></div>
-                <div className="hidden md:block flex-1">
-                  <div className="h-2 sm:h-3 w-16 sm:w-24 bg-gray-200 rounded animate-pulse mb-1 sm:mb-2"></div>
-                  <div className="h-1 sm:h-2 w-12 sm:w-16 bg-gray-200 rounded animate-pulse"></div>
+          {/* User Profile - Always visible at bottom */}
+          <div className="flex-shrink-0 border-t border-gray-100 pt-2 pb-2 sm:pb-4">
+            {loading ? (
+              <div className="px-2 sm:px-4">
+                <div className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-200 animate-pulse flex-shrink-0"></div>
+                  <div className="hidden md:block flex-1 min-w-0">
+                    <div className="h-2 sm:h-3 w-16 sm:w-24 bg-gray-200 rounded animate-pulse mb-1 sm:mb-2"></div>
+                    <div className="h-1 sm:h-2 w-12 sm:w-16 bg-gray-200 rounded animate-pulse"></div>
+                  </div>
                 </div>
               </div>
-            </div>
-          ) : (
-            user && (
-              <div className="mt-auto mb-4 sm:mb-6">
-                <button
-                  className="flex items-center gap-2 sm:gap-3 w-full p-2 sm:p-3 rounded-full hover:bg-gray-100 transition-all duration-200"
-                  onClick={(e) => {
-                    if (e.target.closest("[data-logout]")) {
-                      e.preventDefault();
-                      handleLogout();
-                    }
-                  }}
-                >
-                  <div className="relative">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden border border-gray-200">
-                      <img
-                        src={user?.profileImg || "/avatar-placeholder.png"}
-                        alt={user?.fullname || "User"}
-                        className="object-cover w-full h-full"
-                      />
+            ) : (
+              user && (
+                <div className="px-2 sm:px-4">
+                  <div className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 rounded-full hover:bg-gray-100 transition-all duration-200">
+                    <div className="relative flex-shrink-0">
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden border border-gray-200">
+                        <img
+                          src={user?.profileImg || "/avatar-placeholder.png"}
+                          alt={user?.fullname || "User"}
+                          className="object-cover w-full h-full"
+                        />
+                      </div>
+                      <div className="absolute bottom-0 right-0 w-2 h-2 sm:w-3 sm:h-3 bg-green-500 border-2 border-white rounded-full"></div>
                     </div>
-                    <div className="absolute bottom-0 right-0 w-2 h-2 sm:w-3 sm:h-3 bg-green-500 border-2 border-white rounded-full"></div>
-                  </div>
 
-                  <div className="flex-1 text-left hidden md:block">
-                    <p className="font-medium text-xs sm:text-sm truncate max-w-[120px] text-gray-800">
-                      {user?.fullname || user?.username}
-                    </p>
-                    <p className="text-gray-500 text-xs">@{user?.username}</p>
-                  </div>
+                    <div className="flex-1 text-left hidden md:block min-w-0">
+                      <p className="font-medium text-xs sm:text-sm truncate text-gray-800">
+                        {user?.fullname || user?.username}
+                      </p>
+                      <p className="text-gray-500 text-xs truncate">
+                        @{user?.username}
+                      </p>
+                    </div>
 
-                  <button
-                    data-logout
-                    className="w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center rounded-full hover:bg-red-50 hover:text-red-500 transition-all duration-200"
-                  >
-                    <BiLogOut className="w-3 h-3 sm:w-4 sm:h-4" />
-                  </button>
-                </button>
-              </div>
-            )
-          )}
+                    <button
+                      onClick={handleLogout}
+                      className="w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center rounded-full hover:bg-red-50 hover:text-red-500 transition-all duration-200 flex-shrink-0"
+                      aria-label="Logout"
+                    >
+                      <BiLogOut className="w-3 h-3 sm:w-4 sm:h-4" />
+                    </button>
+                  </div>
+                </div>
+              )
+            )}
+          </div>
         </div>
       </div>
     </div>

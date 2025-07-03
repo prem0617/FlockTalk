@@ -14,6 +14,7 @@ import axios from "axios";
 import { useSocket } from "../../context/SocketContext";
 import useUser from "../../context/UserContext";
 import { BACKEND_URL } from "../../config";
+import Comment from "./Comment";
 
 const PostCard = ({ postData }) => {
   const [post, setPost] = useState(postData);
@@ -73,18 +74,6 @@ const PostCard = ({ postData }) => {
       throw new Error(error);
     } finally {
       setDeleteLoading(false);
-    }
-  };
-
-  const handleDeleteComment = async ({ id, post }) => {
-    try {
-      const response = await axios.delete(
-        `${BACKEND_URL}/api/posts/deleteComment/${id}`,
-        { withCredentials: true }
-      );
-      console.log(response);
-    } catch (error) {
-      console.log(error);
     }
   };
 
@@ -157,8 +146,6 @@ const PostCard = ({ postData }) => {
   useEffect(() => {
     if (!socket) return;
     function handleDeleteComment(deletedComment) {
-      console.log("🧼 Deleting comment from UI:", deletedComment);
-
       setPost((prev) => {
         const updatedComments = prev.commnets?.filter(
           (c) => c._id !== deletedComment._id
@@ -351,49 +338,7 @@ const PostCard = ({ postData }) => {
                     </div>
                   )}
                   {post.commnets?.map((comment) => (
-                    <div
-                      key={comment._id}
-                      className="flex gap-3 p-3 hover:bg-gray-50 rounded-lg transition-colors duration-200"
-                    >
-                      <div className="flex-shrink-0">
-                        <div className="w-8 h-8 rounded-full overflow-hidden">
-                          <img
-                            src={
-                              comment.user.profileImg ||
-                              "/avatar-placeholder.png"
-                            }
-                            alt={comment.user.fullName}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="font-semibold text-sm text-gray-900">
-                            {comment.user.fullName}
-                          </span>
-                          <span className="text-xs text-gray-500">
-                            @{comment.user.username}
-                          </span>
-                        </div>
-                        <div className="flex items-start justify-between gap-2">
-                          <p className="text-sm text-gray-800 break-words flex-1">
-                            {comment.text}
-                          </p>
-                          {(post.user._id === user._id ||
-                            comment.user._id === user._id) && (
-                            <button
-                              className="flex-shrink-0 p-1 text-red-500 hover:bg-red-50 rounded-full transition-colors duration-200"
-                              onClick={() =>
-                                handleDeleteComment({ id: comment._id, post })
-                              }
-                            >
-                              <FaTrashAlt className="w-3 h-3" />
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    </div>
+                    <Comment key={comment.id} comment={comment} post={post} />
                   ))}
                 </div>
 

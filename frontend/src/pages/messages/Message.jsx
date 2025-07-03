@@ -1,4 +1,3 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useEffect, useState, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
@@ -124,39 +123,50 @@ const Message = () => {
   };
 
   if (isFetchingUser || isFetchingMessages) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center h-screen bg-gray-100">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-gray-600 text-sm sm:text-base">Loading...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="flex flex-col h-screen bg-gray-100">
+    <div className="flex flex-col h-screen bg-gray-100 max-w-full overflow-hidden">
       {/* Header */}
-      <div className="bg-white shadow-md p-4 flex items-center">
-        <Link to="/messages" className="mr-3">
-          <ArrowLeft size={20} />
+      <div className="bg-white shadow-md p-3 sm:p-4 flex items-center min-h-[60px] sm:min-h-[70px]">
+        <Link to="/messages" className="mr-2 sm:mr-3 flex-shrink-0">
+          <ArrowLeft size={20} className="sm:w-5 sm:h-5" />
         </Link>
-        <div className="flex items-center justify-between w-full">
-          <div className="flex">
+        <div className="flex items-center justify-between w-full min-w-0">
+          <div className="flex items-center min-w-0 flex-1">
             {receiver.profileImg ? (
               <img
                 src={receiver.profileImg}
                 alt=""
-                className="h-10 w-10 rounded-full object-contain border-2 border-blue-500"
+                className="h-8 w-8 sm:h-10 sm:w-10 rounded-full object-cover border-2 border-blue-500 flex-shrink-0"
               />
             ) : (
-              <div className="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-semibold">
+              <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-semibold text-sm sm:text-base flex-shrink-0">
                 {receiver?.username?.charAt(0).toUpperCase()}
               </div>
             )}
-            <div className="ml-3">
-              <h1 className="font-semibold">{receiver?.username}</h1>
-              <p className="text-sm text-gray-500">{receiver?.email}</p>
+            <div className="ml-2 sm:ml-3 min-w-0 flex-1">
+              <h1 className="font-semibold text-sm sm:text-base lg:text-lg truncate">
+                {receiver?.username}
+              </h1>
+              <p className="text-xs sm:text-sm text-gray-500 truncate">
+                {receiver?.email}
+              </p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto p-2 sm:p-4 space-y-2 sm:space-y-4">
         {messages && messages.length > 0 ? (
           messages.map((message) => (
             <div
@@ -166,13 +176,15 @@ const Message = () => {
               }`}
             >
               <div
-                className={`max-w-xs md:max-w-md rounded-lg px-4 py-2 ${
+                className={`max-w-[280px] sm:max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl rounded-lg px-3 py-2 sm:px-4 sm:py-2 ${
                   message?.sender === user?._id
                     ? "bg-blue-500 text-white rounded-br-none"
                     : "bg-white text-gray-800 rounded-bl-none shadow"
                 }`}
               >
-                <p>{message.content}</p>
+                <p className="text-sm sm:text-base leading-relaxed break-words">
+                  {message.content}
+                </p>
                 <p
                   className={`text-xs mt-1 ${
                     message?.sender === user?._id
@@ -186,8 +198,8 @@ const Message = () => {
             </div>
           ))
         ) : (
-          <div className="h-full flex items-center justify-center">
-            <p className="text-gray-500">
+          <div className="h-full flex items-center justify-center px-4">
+            <p className="text-gray-500 text-sm sm:text-base text-center">
               No messages yet. Start the conversation!
             </p>
           </div>
@@ -196,10 +208,10 @@ const Message = () => {
       </div>
 
       {/* Message Input */}
-      <div className="p-4">
+      <div className="p-2 sm:p-4 bg-white border-t border-gray-200">
         <form
           onSubmit={handleSendMessage}
-          className="flex items-center space-x-2"
+          className="flex items-center space-x-2 sm:space-x-3"
         >
           <input
             type="text"
@@ -207,13 +219,13 @@ const Message = () => {
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="Type a message..."
-            className="flex-1 border border-gray-300 rounded-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex-1 border border-gray-300 rounded-full py-2 px-3 sm:py-3 sm:px-4 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
           <button
             type="submit"
-            className="bg-blue-500 text-white rounded-full p-2 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="bg-blue-500 text-white rounded-full p-2 sm:p-3 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200 flex-shrink-0"
           >
-            <Send size={20} />
+            <Send size={16} className="sm:w-5 sm:h-5" />
           </button>
         </form>
       </div>

@@ -10,7 +10,7 @@ function Navbar() {
       <div className="navbar container mx-auto px-4 py-2">
         <div className="navbar-start">
           <Link to="/" className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold text-primary">
+            <h1 className="text-2xl font-bold text-primary cursor-pointer">
               <span className="flex items-center gap-2">
                 FlockTalk
                 <FaFeatherAlt className="w-5 h-5" />
