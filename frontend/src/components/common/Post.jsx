@@ -6,6 +6,8 @@ import {
   FaBookmark,
   FaRegBookmark,
   FaTrash,
+  FaTrashAlt,
+  FaTimes,
 } from "react-icons/fa";
 import { FaRegComment } from "react-icons/fa6";
 import axios from "axios";
@@ -19,6 +21,7 @@ const PostCard = ({ postData }) => {
   const [comment, setComment] = useState("");
   const [isCommenting, setIsCommenting] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [displayComments, setDisplayComments] = useState(false);
   const [isLiking, setIsLiking] = useState(false);
   const { socket } = useSocket();
   const { user } = useUser();
@@ -28,6 +31,20 @@ const PostCard = ({ postData }) => {
 
   // Check if post belongs to current user
   const isMyPost = user?._id === post?.user?._id;
+
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (displayComments) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+
+    // Cleanup function to restore scroll when component unmounts
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [displayComments]);
 
   useEffect(() => {
     let isBookmarked = post?.bookmarks?.includes(user?._id);
@@ -56,6 +73,18 @@ const PostCard = ({ postData }) => {
       throw new Error(error);
     } finally {
       setDeleteLoading(false);
+    }
+  };
+
+  const handleDeleteComment = async ({ id, post }) => {
+    try {
+      const response = await axios.delete(
+        `${BACKEND_URL}/api/posts/deleteComment/${id}`,
+        { withCredentials: true }
+      );
+      console.log(response);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -93,15 +122,6 @@ const PostCard = ({ postData }) => {
     }
   };
 
-  // Event handlers
-  const handleDeletePost = () => {
-    deletePost();
-  };
-
-  const handleLikePost = () => {
-    likePost();
-  };
-
   const handlePostComment = async (e) => {
     e.preventDefault();
     try {
@@ -123,10 +143,40 @@ const PostCard = ({ postData }) => {
     }
   };
 
-  const handleBookmark = (e) => {
-    e.preventDefault();
-    bookmark();
+  const closeModal = () => {
+    setDisplayComments(false);
   };
+
+  // Close modal when clicking on backdrop
+  const handleBackdropClick = (e) => {
+    if (e.target === e.currentTarget) {
+      closeModal();
+    }
+  };
+
+  useEffect(() => {
+    if (!socket) return;
+    function handleDeleteComment(deletedComment) {
+      console.log("🧼 Deleting comment from UI:", deletedComment);
+
+      setPost((prev) => {
+        const updatedComments = prev.commnets?.filter(
+          (c) => c._id !== deletedComment._id
+        );
+
+        return {
+          ...prev,
+          commnets: updatedComments,
+        };
+      });
+    }
+
+    socket.on("deleteComment", handleDeleteComment);
+
+    return () => {
+      socket.off("deleteComment", handleDeleteComment);
+    };
+  }, [socket]);
 
   useEffect(() => {
     if (!socket) return;
@@ -199,7 +249,7 @@ const PostCard = ({ postData }) => {
                     {isMyPost && (
                       <button
                         className="btn btn-ghost btn-circle btn-xs sm:btn-sm hover:bg-red-100 hover:text-red-500 transition-all duration-300"
-                        onClick={handleDeletePost}
+                        onClick={deletePost}
                         disabled={deleteLoading}
                       >
                         {deleteLoading ? (
@@ -229,11 +279,7 @@ const PostCard = ({ postData }) => {
                 <div className="flex justify-between mt-3 md:mt-4">
                   <button
                     className="btn btn-ghost btn-xs md:btn-sm gap-1 md:gap-2 text-base-content/70 hover:text-primary hover:bg-primary hover:bg-opacity-10 transition-all duration-300 rounded-full"
-                    onClick={() =>
-                      document
-                        .getElementById(`comments_modal${post._id}`)
-                        .showModal()
-                    }
+                    onClick={() => setDisplayComments(true)}
                   >
                     <FaRegComment className="w-3 h-3 md:w-4 md:h-4" />
                     <span className="text-xs">
@@ -247,7 +293,7 @@ const PostCard = ({ postData }) => {
                         ? "text-error hover:text-error/80 hover:bg-error hover:bg-opacity-10"
                         : "text-base-content/70 hover:text-error hover:bg-error hover:bg-opacity-10"
                     }`}
-                    onClick={handleLikePost}
+                    onClick={likePost}
                     disabled={isLiking}
                   >
                     {isLiked ? (
@@ -264,7 +310,7 @@ const PostCard = ({ postData }) => {
                         ? "text-info hover:text-info/80 hover:bg-info hover:bg-opacity-10"
                         : "text-base-content/70 hover:text-info hover:bg-info hover:bg-opacity-10"
                     }`}
-                    onClick={handleBookmark}
+                    onClick={bookmark}
                   >
                     {isBookmarked ? (
                       <FaBookmark className="w-3 h-3 md:w-4 md:h-4 fill-green-500" />
@@ -277,82 +323,103 @@ const PostCard = ({ postData }) => {
             </div>
           </div>
 
-          {/* Comments Modal */}
-          <dialog
-            id={`comments_modal${post._id}`}
-            className="modal border-none outline-none"
-          >
-            <div className="modal-box w-11/12 max-w-md md:max-w-lg rounded border border-gray-600">
-              <h3 className="font-bold text-base md:text-lg mb-3 md:mb-4">
-                COMMENTS
-              </h3>
-              <div className="flex flex-col gap-2 md:gap-3 max-h-40 md:max-h-60 overflow-auto">
-                {(!post.commnets || post.commnets.length === 0) && (
-                  <p className="text-xs md:text-sm text-slate-500">
-                    No comments yet 🤔 Be the first one 😉
-                  </p>
-                )}
-                {post?.commnets &&
-                  post?.commnets.map((comment, index) => (
+          {displayComments && (
+            <div
+              className="fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-4 backdrop-blur-sm"
+              onClick={handleBackdropClick}
+            >
+              <div
+                className="bg-white rounded-xl shadow-2xl w-full max-w-lg max-h-[85vh] flex flex-col border border-gray-200"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="flex items-center justify-between p-4 border-b border-gray-200">
+                  <h3 className="text-lg font-bold text-gray-800">Comments</h3>
+                  <button
+                    onClick={closeModal}
+                    className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200"
+                  >
+                    <FaTimes className="w-4 h-4 text-gray-600" />
+                  </button>
+                </div>
+
+                <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                  {(!post.commnets || post.commnets.length === 0) && (
+                    <div className="text-center py-8">
+                      <p className="text-gray-500 text-sm">
+                        No comments yet 🤔 Be the first one 😉
+                      </p>
+                    </div>
+                  )}
+                  {post.commnets?.map((comment) => (
                     <div
-                      key={comment._id || index}
-                      className="flex gap-2 items-start"
+                      key={comment._id}
+                      className="flex gap-3 p-3 hover:bg-gray-50 rounded-lg transition-colors duration-200"
                     >
-                      <div className="avatar">
-                        <div className="w-6 md:w-8 rounded-full">
+                      <div className="flex-shrink-0">
+                        <div className="w-8 h-8 rounded-full overflow-hidden">
                           <img
                             src={
                               comment.user.profileImg ||
                               "/avatar-placeholder.png"
                             }
                             alt={comment.user.fullName}
+                            className="w-full h-full object-cover"
                           />
                         </div>
                       </div>
-                      <div className="flex flex-col">
-                        <div className="flex items-center gap-1 flex-wrap">
-                          <span className="font-bold text-xs md:text-sm">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="font-semibold text-sm text-gray-900">
                             {comment.user.fullName}
                           </span>
-                          <span className="text-gray-700 text-xs">
+                          <span className="text-xs text-gray-500">
                             @{comment.user.username}
                           </span>
                         </div>
-                        <div className="text-xs md:text-sm break-words">
-                          {comment.text}
+                        <div className="flex items-start justify-between gap-2">
+                          <p className="text-sm text-gray-800 break-words flex-1">
+                            {comment.text}
+                          </p>
+                          {(post.user._id === user._id ||
+                            comment.user._id === user._id) && (
+                            <button
+                              className="flex-shrink-0 p-1 text-red-500 hover:bg-red-50 rounded-full transition-colors duration-200"
+                              onClick={() =>
+                                handleDeleteComment({ id: comment._id, post })
+                              }
+                            >
+                              <FaTrashAlt className="w-3 h-3" />
+                            </button>
+                          )}
                         </div>
                       </div>
                     </div>
                   ))}
+                </div>
+
+                <div className="p-4 border-t border-gray-200">
+                  <form onSubmit={handlePostComment} className="flex gap-3">
+                    <div className="flex-1">
+                      <textarea
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none text-sm"
+                        placeholder="Add a comment..."
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                        rows={2}
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 text-sm font-medium"
+                      disabled={!comment.trim() || isCommenting}
+                    >
+                      {isCommenting ? "Posting..." : "Post"}
+                    </button>
+                  </form>
+                </div>
               </div>
-              <form
-                className="flex gap-2 items-center mt-3 md:mt-4 border-t border-gray-600 pt-2"
-                onSubmit={handlePostComment}
-              >
-                <textarea
-                  className="textarea w-full p-1 rounded text-xs md:text-sm resize-none border focus:outline-none border-gray-800"
-                  placeholder="Add a comment..."
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                  rows={2}
-                />
-                <button
-                  className="btn btn-primary rounded-full btn-xs md:btn-sm text-white px-2 md:px-4"
-                  type="submit"
-                  disabled={!comment.trim() || isCommenting}
-                >
-                  {isCommenting ? (
-                    <span className="loading loading-spinner loading-xs md:loading-md"></span>
-                  ) : (
-                    "Post"
-                  )}
-                </button>
-              </form>
             </div>
-            <form method="dialog" className="modal-backdrop">
-              <button className="outline-none">close</button>
-            </form>
-          </dialog>
+          )}
         </div>
       )}
     </>

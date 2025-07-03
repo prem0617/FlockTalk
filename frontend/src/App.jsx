@@ -20,7 +20,7 @@ import FollowersUsers from "./pages/followersUsers/FollowersUsers";
 function App() {
   const location = useLocation();
   const { loading, user } = useUser();
-  // console.log(user, "user");
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">

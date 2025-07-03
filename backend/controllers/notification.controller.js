@@ -19,7 +19,29 @@ export const getNotifications = async (req, res) => {
       }
     );
 
+    const receiverSocketId = getReciverSocketId(userId);
+
+    io.to(receiverSocketId).emit("allNotificationRead", 0);
+
     return res.status(200).json(notification);
+  } catch (error) {
+    console.log("Error in getNotifications", error.message);
+    return res
+      .status(500)
+      .json({ error: "Error in get notifications, Internal server error" });
+  }
+};
+
+export const getUnreadedNotification = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    const notifications = await NotificationModel.find({
+      to: userId,
+      read: false,
+    }).sort({ createdAt: -1 });
+
+    return res.status(200).json(notifications);
   } catch (error) {
     console.log("Error in getNotifications", error.message);
     return res

@@ -28,7 +28,7 @@ const LoginPage = () => {
 
     try {
       const response = await axios.post(
-        `https://flocktalk.onrender.com/api/auth/login`,
+        `${BACKEND_URL}/api/auth/login`,
         formData,
         { withCredentials: true }
       );

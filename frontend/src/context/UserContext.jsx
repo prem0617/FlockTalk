@@ -34,11 +34,9 @@ export const UserContextProvider = ({ children }) => {
         });
 
         setUser(response.data);
-        // No need to manually set localStorage here anymore
       } catch (error) {
         console.error("Error fetching user:", error);
         setUser(null);
-        // No need to manually remove from localStorage here anymore
       } finally {
         setLoading(false);
       }
@@ -46,7 +44,7 @@ export const UserContextProvider = ({ children }) => {
 
     fetchUser();
   }, []);
-
+  console.log(loading);
   const logout = async () => {
     try {
       await axios.post(
@@ -58,11 +56,9 @@ export const UserContextProvider = ({ children }) => {
       console.error("Logout failed:", error);
     } finally {
       setUser(null);
-      // No need to manually remove from localStorage here anymore
     }
   };
 
-  // Create a custom setter that wraps the original setUser
   const updateUser = (userData) => {
     if (typeof userData === "function") {
       setUser((prevUser) => {

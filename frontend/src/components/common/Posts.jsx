@@ -21,7 +21,7 @@ const Posts = ({ feedType, userId }) => {
 
   const getApiEndPosint = () => {
     if (feedType === "forYou") {
-      return `https://flocktalk.onrender.com/api/posts/getAllPost`;
+      return `${BACKEND_URL}/api/posts/getAllPost`;
     } else if (feedType === "following") {
       return `${BACKEND_URL}/api/posts/following`;
     } else if (feedType === "likes") {

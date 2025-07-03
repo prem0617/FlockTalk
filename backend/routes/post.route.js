@@ -3,6 +3,7 @@ import { protectRoute } from "../middleware/protectRoute.js";
 
 import {
   bookMark,
+  commentDeleteOnPost,
   commentOnPost,
   createPost,
   deletePost,
@@ -26,6 +27,7 @@ router.get("/getLikedPost/:id", protectRoute, getLikedPost);
 router.post("/delete/:id", protectRoute, deletePost);
 router.get("/like/:id", protectRoute, likeUnlikePost);
 router.post("/comment/:id", protectRoute, commentOnPost);
+router.delete("/deleteComment/:id", protectRoute, commentDeleteOnPost);
 router.get("/bookmark/:id", protectRoute, bookMark);
 router.get("/getBookmark", protectRoute, getBookMarkPosts);
 

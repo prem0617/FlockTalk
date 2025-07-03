@@ -223,12 +223,34 @@ export const commentOnPost = async (req, res) => {
 
 // TODO : User can Delete the comment on Post
 
-// export const commentDeleteOnPost = async (req, res) => {
-//   try {
-//     const {id} = req.params;
+export const commentDeleteOnPost = async (req, res) => {
+  try {
+    const { id } = req.params;
 
-//   } catch (error) {}
-// };
+    const post = await PostModel.findOne({ "commnets._id": id });
+
+    if (!post) {
+      throw new Error("Comment not found");
+    }
+
+    const commentToDelete = post.commnets.find((c) => c._id.toString() === id);
+
+    if (!commentToDelete) {
+      throw new Error("Comment not found");
+    }
+
+    await PostModel.findOneAndUpdate(
+      { "commnets._id": id },
+      { $pull: { commnets: { _id: id } } }
+    );
+
+    io.emit("deleteComment", commentToDelete);
+
+    return res.json(commentToDelete);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export const getAllPost = async (req, res) => {
   try {

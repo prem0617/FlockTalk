@@ -9,7 +9,8 @@ export const generateTokenAndSetCookies = (userId, res) => {
 
   res.cookie("flocktalk", token, {
     httpOnly: true,
-    secure: true, // ✅ for HTTPS
-    sameSite: "None", // ✅ required for cross-site cookies
+    secure: true,
+    sameSite: "none",
+    maxAge: 15 * 24 * 60 * 60 * 1000,
   });
 };

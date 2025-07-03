@@ -2,9 +2,6 @@ import { generateTokenAndSetCookies } from "../lib/utils/generateTokenAndSetCook
 import UserModel from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 
-// ?remaing TODO
-// TODO : Edit user's username to lowercase and execeute the query while login or sign up with lower case username same for email so we can get the correct even is user fill the details in different case
-
 // signup route
 export const signup = async (req, res) => {
   try {
@@ -137,8 +134,8 @@ export const logout = async (req, res) => {
 
     res.cookie("flocktalk", "", {
       httpOnly: true,
-      secure: true, // ✅ must match the `secure` option used during login
-      sameSite: "None", // ✅ must match the `sameSite` option used during login
+      secure: true,
+      sameSite: "none",
       expires: new Date(0), // ✅ or use maxAge: 0
     });
 

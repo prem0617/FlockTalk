@@ -8,11 +8,54 @@ import { BsChat } from "react-icons/bs";
 import useUser from "../../context/UserContext";
 import axios from "axios";
 import { BACKEND_URL } from "../../config";
+import { useEffect, useState } from "react";
+import { useSocket } from "../../context/SocketContext";
 
 const Sidebar = () => {
   const location = useLocation();
   const { user, loading, setUser } = useUser();
+  const [notification, setNotification] = useState(0);
   const navigate = useNavigate();
+  const { socket } = useSocket();
+
+  const getNotification = async () => {
+    try {
+      const response = await axios.get(
+        `${BACKEND_URL}/api/notification/unreaded`,
+        { withCredentials: true }
+      );
+
+      setNotification(response.data.length);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (!socket) return;
+    const handleNotification = (notification) => {
+      console.log(notification);
+      setNotification((prev) => {
+        console.log(prev);
+        return prev + 1;
+      });
+    };
+    socket.on("notification", handleNotification);
+
+    const handleNotificationRead = (notification) => {
+      setNotification(notification);
+    };
+    socket.on("allNotificationRead", handleNotificationRead);
+
+    return function () {
+      socket.off("notification", handleNotification);
+      socket.off("allNotificationRead", handleNotificationRead);
+    };
+  }, [socket]);
+
+  useEffect(() => {
+    getNotification();
+  }, []);
 
   const isActive = (path, exact = false) => {
     if (exact) {
@@ -56,6 +99,7 @@ const Sidebar = () => {
       path: "/notification",
       label: "Notifications",
       icon: IoNotifications,
+      hasNotification: true, // Flag to show notification badge
     },
     {
       path: "/messages",
@@ -111,11 +155,21 @@ const Sidebar = () => {
                       : "text-gray-700 hover:bg-gray-100"
                   }`}
                 >
-                  <Icon
-                    className={`w-5 h-5 sm:w-6 sm:h-6 ${
-                      active ? "text-blue-500" : "text-gray-500"
-                    }`}
-                  />
+                  <div className="relative">
+                    <Icon
+                      className={`w-5 h-5 sm:w-6 sm:h-6 ${
+                        active ? "text-blue-500" : "text-gray-500"
+                      }`}
+                    />
+                    {/* Notification Badge */}
+                    {item.hasNotification && notification > 0 && (
+                      <div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2">
+                        <div className="flex items-center justify-center min-w-[16px] sm:min-w-[18px] h-4 sm:h-[18px] bg-red-500 text-white text-[10px] sm:text-xs font-bold rounded-full px-1">
+                          {notification > 99 ? "99+" : notification}
+                        </div>
+                      </div>
+                    )}
+                  </div>
                   <span
                     className={`text-sm sm:text-base hidden md:block ${
                       active ? "font-medium" : ""
